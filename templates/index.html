@@ -24,6 +24,7 @@
         <p>Bio</p><input type="text" name="bio" id="bio"><br>
         <input type="submit">
     </form>
+    <p id="notifs"></p>
     <script>
         $(document).ready(function() {
             $.ajax({
@@ -32,7 +33,7 @@
                 success: (data) => {
                     for (let key in data.profiles)
                         {
-                            let temp = "<li>"+data.profiles[key].name+"</li>";
+                            let temp = "<li>"+data.profiles[key].name+" - "+data.profiles[key].email+"</li>";
                             $("#display-data").append(temp);
                         }
                 },
@@ -49,10 +50,11 @@
                         console.log("Refreshing list...");
                         for (let key in data.profiles)
                         {
-                            let temp = "<li>"+data.profiles[key].name+"</li>";
+                            let temp = "<li>"+data.profiles[key].name+" - "+data.profiles[key].email+"</li>";
                             $("#display-data").append(temp);
                         }
                         console.log("Refresh complete.");
+                        $("#notifs").text('');
                     },
                     error: (message) => {
                         alert(message);
@@ -72,7 +74,7 @@
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
                 success: function (data) {
-                    alert(data);
+                    $("#notifs").text("data submitted successfully");
                 },
                 error: function (error) {
                     alert(error);
