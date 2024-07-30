@@ -1,2 +1,8 @@
 test project to learn jquery and ajax
 admin-admin@example.com-1
+
+post request - done
+refresh button feature - done
+edit button
+single item delete
+multiple items delete

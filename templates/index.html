@@ -14,6 +14,16 @@
 <body>
     <h1>List of live data</h1>
     <ul id="display-data"></ul>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody id="data-tbody">
+        </tbody>
+    </table>
     <button type="button" id="refresh">Refresh</button>
 
     <h1>Submit form</h1>
@@ -27,31 +37,36 @@
     <p id="notifs"></p>
     <script>
         $(document).ready(function() {
+            // loading landing page
             $.ajax({
                 type: "GET",
                 url: '{% url "getProfiles" %}',
                 success: (data) => {
+                    let tbodyRef = $("#data-table").find('tbody');
                     for (let key in data.profiles)
                         {
-                            let temp = "<li>"+data.profiles[key].name+" - "+data.profiles[key].email+"</li>";
-                            $("#display-data").append(temp);
+                            let temp = "<tr><td>"+data.profiles[key].name +"</td>" + "<td>" + data.profiles[key].email + "</td></tr>"
+                            tbodyRef.append(temp);
                         }
                 },
                 error: (e) => {
                     alert(e);
                 }
             });
+            // refresh button
             $("#refresh").click(function() {
-                $("#display-data").empty();
+                // clearing table
+                $("#data-tbody tr").remove();
                 $.ajax({
                     type: 'GET',
                     url: '{% url "getProfiles" %}',
                     success: (data) => {
                         console.log("Refreshing list...");
+                        let tbodyRef = $("#data-table").find('tbody');
                         for (let key in data.profiles)
                         {
-                            let temp = "<li>"+data.profiles[key].name+" - "+data.profiles[key].email+"</li>";
-                            $("#display-data").append(temp);
+                            let temp = "<tr><td>"+data.profiles[key].name +"</td>" + "<td>" + data.profiles[key].email + "</td></tr>"
+                            tbodyRef.append(temp);
                         }
                         console.log("Refresh complete.");
                         document.getElementById("post-form").reset();
@@ -63,6 +78,7 @@
                 })
             });
         });
+        // form post
         $(document).on('submit', '#post-form', function (e) {
             e.preventDefault();
             $.ajax({
