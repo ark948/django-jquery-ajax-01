@@ -54,6 +54,7 @@
                             $("#display-data").append(temp);
                         }
                         console.log("Refresh complete.");
+                        document.getElementById("post-form").reset();
                         $("#notifs").text('');
                     },
                     error: (message) => {
