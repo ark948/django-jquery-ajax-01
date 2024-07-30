@@ -14,6 +14,7 @@
 <body>
     <h1>List of live data</h1>
     <ul id="display-data"></ul>
+    <button type="button" id="refresh">Refresh</button>
 
     <h1>Submit form</h1>
     <form id="post-form" method="POST" action="{% url 'create' %}">
@@ -24,6 +25,27 @@
         <input type="submit">
     </form>
     <script>
+        $(document).ready(function() {
+            $("#refresh").click(function() {
+                $("#display-data").empty();
+                $.ajax({
+                    type: 'GEt',
+                    url: '{% url "getProfiles" %}',
+                    success: (data) => {
+                        console.log("Refreshing list...");
+                        for (let key in data.profiles)
+                        {
+                            let temp = "<li>"+data.profiles[key].name+"</li>";
+                            $("#display-data").append(temp);
+                        }
+                        console.log("Refresh complete.");
+                    },
+                    error: (message) => {
+                        alert(message);
+                    }
+                })
+            });
+        });
         $(document).on('submit', '#post-form', function (e) {
             e.preventDefault();
             $.ajax({
@@ -37,6 +59,9 @@
                 },
                 success: function (data) {
                     alert(data);
+                },
+                error: function (error) {
+                    alert(error);
                 }
             });
         });
