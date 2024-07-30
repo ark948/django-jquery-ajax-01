@@ -26,10 +26,24 @@
     </form>
     <script>
         $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: '{% url "getProfiles" %}',
+                success: (data) => {
+                    for (let key in data.profiles)
+                        {
+                            let temp = "<li>"+data.profiles[key].name+"</li>";
+                            $("#display-data").append(temp);
+                        }
+                },
+                error: (e) => {
+                    alert(e);
+                }
+            });
             $("#refresh").click(function() {
                 $("#display-data").empty();
                 $.ajax({
-                    type: 'GEt',
+                    type: 'GET',
                     url: '{% url "getProfiles" %}',
                     success: (data) => {
                         console.log("Refreshing list...");
