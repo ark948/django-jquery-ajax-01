@@ -68,7 +68,6 @@
                             let temp = "<tr><td>"+data.profiles[key].name +"</td>" + "<td>" + data.profiles[key].email + "</td></tr>"
                             tbodyRef.append(temp);
                         }
-                        console.log("Refresh complete.");
                         document.getElementById("post-form").reset();
                         $("#notifs").text('');
                     },
@@ -92,6 +91,8 @@
                 },
                 success: function (data) {
                     $("#notifs").text("data submitted successfully");
+                    // refreshing the list
+                    $("#refresh").trigger("click");
                 },
                 error: function (error) {
                     alert(error);
