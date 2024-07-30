@@ -1,0 +1,1 @@
+Sample project to practice jquery ajax with django
