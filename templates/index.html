@@ -10,6 +10,31 @@
     <script src="/static/jquery-3.7.1.js"></script>
 </head>
 <body>
-    shit
+    <h1>List of live data</h1>
+    <ul id="display-data">
+
+    </ul>
+    <script>
+        $(document).ready(function() {
+            setInterval(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: "{% url 'getProfiles' %}",
+                    success: function(response) {
+                        // console.log(response);
+                        $('#display-data').empty(); // make it empty before use
+                        for (var key in response.profiles) {
+                            var temp = "<h2><li>"+response.profiles[key].name+"</li></h2>";
+                            $("#display-data").append(temp);
+                        }
+                        console.log("list updated");
+                    },
+                    error: function(response) {
+                        alert("An error ocurred");
+                    }
+                });
+            }, 2000);
+        });
+    </script>
 </body>
 </html>
