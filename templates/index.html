@@ -35,12 +35,13 @@
         <input type="submit">
     </form>
     <p id="notifs"></p>
+    <a href="{% url 'with-fetch' %}">using fetch</a>
     <script>
         $(document).ready(function() {
             // loading landing page
             $.ajax({
                 type: "GET",
-                url: '{% url "getProfilesV2" %}',
+                url: '{% url "getProfiles" %}',
                 success: (data) => {
                     let tbodyRef = $("#data-table").find('tbody');
                     for (let key in data.profiles)
@@ -59,7 +60,7 @@
                 $("#data-tbody tr").remove();
                 $.ajax({
                     type: 'GET',
-                    url: '{% url "getProfilesV2" %}',
+                    url: '{% url "getProfiles" %}',
                     success: (data) => {
                         console.log("Refreshing list...");
                         let tbodyRef = $("#data-table").find('tbody');

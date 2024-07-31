@@ -7,11 +7,17 @@ from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 def index(request):
     return render(request, "index.html")
 
+def with_fetch(request):
+    return render(request, "with_fetch.html")
+
+
+
 
 def getProfiles(request):
     profiles = Profile.objects.all()
     return JsonResponse({"profiles": list(profiles.values())})
 
+# handle ajax made with fetch
 def getProfilesV2(request):
     # checks if request is ajax
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -19,7 +25,7 @@ def getProfilesV2(request):
         print("request is ajax")
         if request.method == "GET":
             profiles = list(Profile.objects.all().values())
-            return JsonResponse({"profiles": profiles})
+            return JsonResponse({"context": profiles})
         return JsonResponse({'status': 'Invalid Request'}, status=400)
     else:
         return HttpResponseBadRequest('Invalid Request')
