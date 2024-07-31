@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from my_app.models import Profile
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 
 # Create your views here.
 
@@ -11,6 +11,18 @@ def index(request):
 def getProfiles(request):
     profiles = Profile.objects.all()
     return JsonResponse({"profiles": list(profiles.values())})
+
+def getProfilesV2(request):
+    # checks if request is ajax
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if is_ajax:
+        print("request is ajax")
+        if request.method == "GET":
+            profiles = list(Profile.objects.all().values())
+            return JsonResponse({"profiles": profiles})
+        return JsonResponse({'status': 'Invalid Request'}, status=400)
+    else:
+        return HttpResponseBadRequest('Invalid Request')
 
 
 def create(request):

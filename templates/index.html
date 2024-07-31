@@ -24,7 +24,7 @@
         <tbody id="data-tbody">
         </tbody>
     </table>
-    <button type="button" id="refresh">Refresh</button>
+    <button type="button" id="refresh">Refresh</button><h6>(Manual Refresh)</h6>
 
     <h1>Submit form</h1>
     <form id="post-form" method="POST" action="{% url 'create' %}">
@@ -40,7 +40,7 @@
             // loading landing page
             $.ajax({
                 type: "GET",
-                url: '{% url "getProfiles" %}',
+                url: '{% url "getProfilesV2" %}',
                 success: (data) => {
                     let tbodyRef = $("#data-table").find('tbody');
                     for (let key in data.profiles)
@@ -59,7 +59,7 @@
                 $("#data-tbody tr").remove();
                 $.ajax({
                     type: 'GET',
-                    url: '{% url "getProfiles" %}',
+                    url: '{% url "getProfilesV2" %}',
                     success: (data) => {
                         console.log("Refreshing list...");
                         let tbodyRef = $("#data-table").find('tbody');
