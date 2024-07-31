@@ -6,3 +6,6 @@ refresh button feature - done
 edit button
 single item delete
 multiple items delete
+
+trying to move js code into their own files
+(function declarations in js files, function calls in html files, js includes in base html)

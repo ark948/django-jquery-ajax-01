@@ -1,49 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/jquery-3.7.1.js"></script>
-</head>
-<body>
+{% extends "_base.html" %}
+
+{% block content %}
     <h2>(Using fetch instead of jquery)</h2>
     <ul id="profilelist"></ul>
     <button id="getProfiles">Read</button>
-    <script>
-        // getting all records using fetch
-        function getALlProfiles(url) {
-            console.log("Requesting data...");
-            fetch(url, {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                }
-            })
-                .then(resposne => resposne.json())
-                .then(data => {
-                    const profileList = document.getElementById("profilelist");
-                    profileList.innerHTML = "";
+{% endblock content %}
 
-                    (data.context).forEach(profile => {
-                        const profileHTMLElement = `
-                            <li>
-                                <p>Name: ${profile.name}</p>
-                                <p>Email: ${profile.email}</p>
-                            </li>`
-                            profileList.innerHTML += profileHTMLElement;
-                    });
-                });
-                console.log("Data received");
-        }
-        (function() {
-            const get_all_profiles_url = "{% url 'getProfilesV2' %}";
-            const readButton = document.getElementById("getProfiles");
-            readButton.addEventListener("click", () => {
-                getALlProfiles(get_all_profiles_url);
-            });
-        })();
-    </script>
-</body>
-</html>
+{% block javascript %}
+<script>
+    (function() {
+        const get_all_profiles_url = "{% url 'getProfilesV2' %}";
+        const readButton = document.getElementById("getProfiles");
+        readButton.addEventListener("click", () => {
+            getALlProfiles(get_all_profiles_url);
+        });
+    })();
+</script>
+{% endblock javascript %}
