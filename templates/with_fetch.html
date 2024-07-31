@@ -4,15 +4,41 @@
     <h2>(Using fetch instead of jquery)</h2>
     <ul id="profilelist"></ul>
     <button id="getProfiles">Read</button>
+    <br>
+
+    <h2>POST</h2>
+    <form id="addProfileForm">
+        <label for="profileNamePost">Name:</label>
+        <input type="text" id="profileNamePost">
+        <lable for="profileEmailPost">Email:</lable>
+        <input type="email" id="profileEmailPost">
+        <button type="submit">Create</button>
+    </form>
 {% endblock content %}
 
 {% block javascript %}
 <script>
     (function() {
-        const get_all_profiles_url = "{% url 'getProfilesV2' %}";
+        // GET
+        const get_all_profiles_url = "{% url 'getProfilesV2' %}"; // GET and POST have the same handler
+
         const readButton = document.getElementById("getProfiles");
         readButton.addEventListener("click", () => {
             getALlProfiles(get_all_profiles_url);
+        });
+
+        // POST
+        const addProfileForm = document.getElementById("addProfileForm");
+        addProfileForm.addEventListener("submit", (e) => {
+            // prevent page reload
+            e.preventDefault();
+            // get the values from form fields
+            const formData = {
+                name: addProfileForm["profileNamePost"].value,
+                email: addProfileForm["profileEmailPost"].value,
+            }
+            addProfile(get_all_profiles_url, formData);
+            addProfileForm.reset();
         });
     })();
 </script>

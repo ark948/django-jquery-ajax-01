@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from my_app.models import Profile
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
@@ -26,6 +27,11 @@ def getProfilesV2(request):
         if request.method == "GET":
             profiles = list(Profile.objects.all().values())
             return JsonResponse({"context": profiles})
+        if request.method == "POST":
+            data = json.load(request) # deserialize the request object
+            profile = data.get('payload')
+            Profile.objects.create(name=profile['name'], email=profile['email'])
+            return JsonResponse({"status": 'Profile added.'})
         return JsonResponse({'status': 'Invalid Request'}, status=400)
     else:
         return HttpResponseBadRequest('Invalid Request')
