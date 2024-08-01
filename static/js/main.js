@@ -1,6 +1,5 @@
 // getting all records using fetch
 function getALlProfiles(url) {
-    console.log("Requesting data...");
     fetch(url, {
         headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -12,28 +11,28 @@ function getALlProfiles(url) {
             profileList.innerHTML = "";
 
             (data.context).forEach(profile => {
-                const profileHTMLElement = `<li> Name: ${profile.name} - Email: ${profile.email} </li>`;
+                const profileHTMLElement = `<li>ID: ${profile.id} - Name: ${profile.name} - Email: ${profile.email} </li>`;
                 profileList.innerHTML += profileHTMLElement;
             });
         });
-    console.log("Data received.");
+    console.log("Refreshing...");
 }
 
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
         }
-      }
     }
     return cookieValue;
-  }
+}
 
 // POST (adding profile)
 // credentials and cookies are to be noticed
@@ -49,9 +48,26 @@ function addProfile(url, payload) {
             "X-Requested-With": "XMLHttpRequest",
             "X-CSRFToken": getCookie("csrftoken"), // to handle CSRF verification
         },
-        body: JSON.stringify({payload: payload})
+        body: JSON.stringify({ payload: payload })
     })
         .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+}
+
+
+function updateProfile(url, payload) {
+    fetch(url, {
+        method: "PUT",
+        credentials: "same-origin",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ payload: payload })
+    })
+        .then(response => response.json)
         .then(data => {
             console.log(data);
         });

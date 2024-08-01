@@ -14,6 +14,17 @@
         <input type="email" id="profileEmailPost">
         <button type="submit">Create</button>
     </form>
+
+    <h2>PUT</h2>
+    <form id="updateProfileForm">
+        <label for="profileIdPut">ID:</label>
+        <input type="number" id="profileIdPut">
+        <label for="profileNamePut">Name:</label>
+        <input type="text" id="profileNamePut">
+        <label for="profileEmailPut">Email:</label>
+        <input type="email" id="profileEmailPut">
+        <button type="submit">Update</button>
+    </form>
 {% endblock content %}
 
 {% block javascript %}
@@ -37,8 +48,24 @@
                 name: addProfileForm["profileNamePost"].value,
                 email: addProfileForm["profileEmailPost"].value,
             }
+
             addProfile(get_all_profiles_url, formData);
             addProfileForm.reset();
+        });
+
+        // PUT
+        const updateProfileForm = document.getElementById("updateProfileForm");
+        updateProfileForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = {
+                name: updateProfileForm.elements['profileNamePut'].value,
+                email: updateProfileForm.elements['profileEmailPut'].value
+            }
+            
+            const profileId = updateProfileForm.elements["profileIdPut"].value;
+            const singleProfileUrl = `/profiles/${profileId}`;
+            updateProfile(singleProfileUrl, formData);
+            updateProfileForm.reset();
         });
     })();
 </script>

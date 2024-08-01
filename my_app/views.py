@@ -1,7 +1,9 @@
 import json
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from my_app.models import Profile
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.forms.models import model_to_dict
+from django.core import serializers
 
 # Create your views here.
 
@@ -10,8 +12,6 @@ def index(request):
 
 def with_fetch(request):
     return render(request, "with_fetch.html")
-
-
 
 
 def getProfiles(request):
@@ -47,3 +47,26 @@ def create(request):
         new_profile.save()
 
         return HttpResponse('New Profile created successfully')
+    
+def get_profile(request, pk):
+    profile = get_object_or_404(Profile, id=pk)
+    profile = {"id": profile.id, "name": profile.name, "email": profile.email}
+    return JsonResponse(profile)
+    
+
+def profile(request, profileId):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if is_ajax:
+        profile = get_object_or_404(Profile, id=profileId)
+        if request.method == "PUT":
+            data = json.load(request)
+            updated_value = data.get('payload')
+
+            profile.name = updated_value['name']
+            profile.email = updated_value['email']
+            profile.save()
+
+            return JsonResponse({'status': 'Profile updated.'})
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    else:
+        return HttpResponseBadRequest('Invalid request')

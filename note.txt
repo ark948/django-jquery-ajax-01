@@ -1,10 +1,13 @@
 test project to learn jquery and ajax
 admin-admin@example.com-1
 
-post request - done
-refresh button feature - done
-edit button
-single item delete
+using ajax with fetch
+using ajax with jquery
+
+post request - done (GET)
+refresh button feature - done (POST)
+edit button (PUT)
+single item delete (DELETE)
 multiple items delete
 
 trying to move js code into their own files
