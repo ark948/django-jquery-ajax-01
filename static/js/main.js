@@ -12,7 +12,7 @@ function getALlProfiles(url) {
             profileList.innerHTML = "";
 
             (data.context).forEach(profile => {
-                const profileHTMLElement = `<li>ID: ${profile.id} - Name: ${profile.name} - Email: ${profile.email} </li>`;
+                const profileHTMLElement = `<li id=Item${profile.id}> ID: ${profile.id} - Name: ${profile.name} - Email: ${profile.email} </li>`;
                 profileList.innerHTML += profileHTMLElement;
             });
         });

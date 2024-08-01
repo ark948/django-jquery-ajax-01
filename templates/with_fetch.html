@@ -4,6 +4,7 @@
     <script src="/static/js/test.js"></script>
     <script src="/static/js/main.js"></script>
     <script src="/static/js/jquery-3.7.1.js"></script>
+
     <h2>(Using fetch instead of jquery)</h2>
     <ul id="profilelist"></ul>
     <button id="getProfiles">Read</button>
@@ -41,6 +42,16 @@
 {% block javascript %}
 <script>
     (function() {
+
+        // Staging items for update upon click
+        let ul = document.getElementById("profilelist");
+        ul.addEventListener('click', function(e) {
+            if (e.target.tagName === "LI") {
+                console.log("Got the EL");
+                console.log(e.target.id);
+            }
+        })
+
         // GET
         const get_all_profiles_url = "{% url 'getProfilesV2' %}"; // GET and POST have the same handler
 
