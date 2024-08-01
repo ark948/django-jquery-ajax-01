@@ -75,6 +75,11 @@
                     let p = document.getElementById("result");
                     console.log("Got something");
                     p.innerText = data.name;
+                    // Also adding item to PUT form fields to be improve update
+                    document.getElementById("profileIdPut").value = data.id;
+                    document.getElementById("profileNamePut").value = data.name;
+                    document.getElementById("profileEmailPut").value = data.email;
+
                 })
                 .catch(response => console.log(response));
         });

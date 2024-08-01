@@ -13,5 +13,6 @@ multiple items delete
 trying to move js code into their own files
 (function declarations in js files, function calls in html files, js includes in base html)
 
+Current problems:
 urls and endpoint names are messy.
-
+static files imports are very messy.
