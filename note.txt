@@ -6,9 +6,12 @@ using ajax with jquery
 
 post request - done (GET)
 refresh button feature - done (POST)
-edit button (PUT)
+edit button (PUT) - done - (but requires user to manually enter item id)
 single item delete (DELETE)
 multiple items delete
 
 trying to move js code into their own files
 (function declarations in js files, function calls in html files, js includes in base html)
+
+urls and endpoint names are messy.
+

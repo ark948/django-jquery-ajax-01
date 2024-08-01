@@ -1,3 +1,4 @@
+console.log("MAIN HARD LOADED");
 // getting all records using fetch
 function getALlProfiles(url) {
     fetch(url, {
@@ -67,7 +68,7 @@ function updateProfile(url, payload) {
         },
         body: JSON.stringify({ payload: payload })
     })
-        .then(response => response.json)
+        .then(response => response.json())
         .then(data => {
             console.log(data);
         });

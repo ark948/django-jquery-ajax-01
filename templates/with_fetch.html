@@ -1,6 +1,9 @@
 {% extends "_base.html" %}
 
 {% block content %}
+    <script src="/static/js/test.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/jquery-3.7.1.js"></script>
     <h2>(Using fetch instead of jquery)</h2>
     <ul id="profilelist"></ul>
     <button id="getProfiles">Read</button>
@@ -14,6 +17,14 @@
         <input type="email" id="profileEmailPost">
         <button type="submit">Create</button>
     </form>
+    
+    <h2>Test individual GET for Profile</h2>
+    <form id="getSingleProfile">
+        <label for="profileIdGet">ID:</label>
+        <input type="text" id="profileIdGet">
+        <button type="submit">Request</button>
+    </form>
+    <p id="result"></p>
 
     <h2>PUT</h2>
     <form id="updateProfileForm">
@@ -53,19 +64,38 @@
             addProfileForm.reset();
         });
 
+        // Single GET
+        const getSingleProfileForm = document.getElementById("getSingleProfile");
+        getSingleProfileForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let id = getSingleProfileForm.elements['profileIdGet'].value;
+            let url = `/get-profile/${id}/`;
+            fetch(url).then(response => response.json())
+                .then(data => {
+                    let p = document.getElementById("result");
+                    console.log("Got something");
+                    p.innerText = data.name;
+                })
+                .catch(response => console.log(response));
+        });
+
         // PUT
         const updateProfileForm = document.getElementById("updateProfileForm");
         updateProfileForm.addEventListener("submit", (e) => {
             e.preventDefault();
+            console.log("Preventing default.");
             const formData = {
                 name: updateProfileForm.elements['profileNamePut'].value,
                 email: updateProfileForm.elements['profileEmailPut'].value
             }
-            
             const profileId = updateProfileForm.elements["profileIdPut"].value;
-            const singleProfileUrl = `/profiles/${profileId}`;
+            console.log("ID: => " + profileId);
+            const singleProfileUrl =  `/profile/${profileId}/`;
+            console.log("URL: => " + singleProfileUrl)
             updateProfile(singleProfileUrl, formData);
+            console.log("PUT Sent.");
             updateProfileForm.reset();
+            console.log("Resetting form.");
         });
     })();
 </script>
