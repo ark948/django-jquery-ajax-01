@@ -1,54 +1,67 @@
 {% extends "_base.html" %}
 
 {% block content %}
-    <script src="/static/js/test.js"></script>
-    <script src="/static/js/main.js"></script>
-    <script src="/static/js/jquery-3.7.1.js"></script>
+<script src="/static/js/test.js"></script>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/jquery-3.7.1.js"></script>
 
-    <h2>(Using fetch instead of jquery)</h2>
-    <ul id="profilelist"></ul>
-    <button id="getProfiles">Read</button>
-    <br>
+<h2>(Using fetch instead of jquery)</h2>
+<ul id="profilelist"></ul>
+<button id="getProfiles">Read</button>
+<br>
 
-    <h2>POST</h2>
-    <form id="addProfileForm">
-        <label for="profileNamePost">Name:</label>
-        <input type="text" id="profileNamePost">
-        <lable for="profileEmailPost">Email:</lable>
-        <input type="email" id="profileEmailPost">
-        <button type="submit">Create</button>
-    </form>
-    
-    <h2>Test individual GET for Profile</h2>
-    <form id="getSingleProfile">
-        <label for="profileIdGet">ID:</label>
-        <input type="text" id="profileIdGet">
-        <button type="submit">Request</button>
-    </form>
-    <p id="result"></p>
+<h2>POST</h2>
+<form id="addProfileForm">
+    <label for="profileNamePost">Name:</label>
+    <input type="text" id="profileNamePost">
+    <lable for="profileEmailPost">Email:</lable>
+    <input type="email" id="profileEmailPost">
+    <button type="submit">Create</button>
+</form>
 
-    <h2>PUT</h2>
-    <form id="updateProfileForm">
-        <label for="profileIdPut">ID:</label>
-        <input type="number" id="profileIdPut">
-        <label for="profileNamePut">Name:</label>
-        <input type="text" id="profileNamePut">
-        <label for="profileEmailPut">Email:</label>
-        <input type="email" id="profileEmailPut">
-        <button type="submit">Update</button>
-    </form>
+<h2>Test individual GET for Profile</h2>
+<form id="getSingleProfile">
+    <label for="profileIdGet">ID:</label>
+    <input type="text" id="profileIdGet">
+    <button type="submit">Request</button>
+</form>
+<p id="result"></p>
+
+<h2>PUT</h2>
+<form id="updateProfileForm">
+    <label for="profileIdPut">ID:</label>
+    <input type="number" id="profileIdPut">
+    <label for="profileNamePut" autocomplete="off">Name:</label>
+    <input type="text" id="profileNamePut">
+    <label for="profileEmailPut">Email:</label>
+    <input type="email" id="profileEmailPut">
+    <button type="submit">Update</button>
+</form>
+
+<h2>DELETE</h2>
+<form id="deleteProfileForm">
+    <label for="profileDeleteId">ID</label>
+    <input type="number" id="profileDeleteId">
+    <button type="submit">Delete</button>
+</form>
+
 {% endblock content %}
 
 {% block javascript %}
 <script>
-    (function() {
+    (function () {
 
         // Staging items for update upon click
         let ul = document.getElementById("profilelist");
-        ul.addEventListener('click', function(e) {
+        ul.addEventListener('click', function (e) {
+            document.getElementById("updateProfileForm").reset();
             if (e.target.tagName === "LI") {
-                console.log("Got the EL");
-                console.log(e.target.id);
+                let item_id = e.target.id;
+                let item_name = $(`#${item_id}`).data('profile-name');
+                let item_email = $(`#${item_id}`).data('profile-email')
+                document.getElementById("profileIdPut").value = item_id;
+                document.getElementById("profileNamePut").setAttribute("value", item_name);
+                document.getElementById("profileEmailPut").value = item_email;
             }
         })
 
@@ -105,13 +118,46 @@
                 email: updateProfileForm.elements['profileEmailPut'].value
             }
             const profileId = updateProfileForm.elements["profileIdPut"].value;
-            console.log("ID: => " + profileId);
-            const singleProfileUrl =  `/profile/${profileId}/`;
-            console.log("URL: => " + singleProfileUrl)
+            const singleProfileUrl = `/profile/${profileId}/`;
             updateProfile(singleProfileUrl, formData);
-            console.log("PUT Sent.");
             updateProfileForm.reset();
-            console.log("Resetting form.");
+        });
+
+        // DELETE
+        const deleteProfileForm = document.getElementById("deleteProfileForm");
+        deleteProfileForm.addEventListener("submit", (e) => {
+            console.log("Stopping delete form");
+            e.preventDefault();
+
+            const profileId = deleteProfileForm.elements['profileDeleteId'].value;
+            console.log("Aquiring ID.");
+            const singleProfileUrl = `/get-profile/${profileId}/`;
+            console.log("Aquiring ID done. -> " + singleProfileUrl);
+            try {
+                console.log("Attempting to delete using deleteThis function");
+                deleteThis(singleProfileUrl);
+            } catch(err) {
+                console.log("Error occurred. Sending fetch directly...");
+                fetch(`profile/${profileId}/`, {
+                    method: "DELETE",
+                    credentials: "same-origin",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    }
+                }).then(response => {
+                    console.log("Delete successful.");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Triggering refresh...");
+                    document.getElementById("getProfiles").click();
+                    console.log(data);
+                })
+                .catch(err => console.log("FINAL ERROR" + err));
+            }
+            deleteProfileForm.reset();
+            console.log("Form reset.");
         });
     })();
 </script>

@@ -67,6 +67,9 @@ def profile(request, profileId):
             profile.save()
 
             return JsonResponse({'status': 'Profile updated.'})
+        if request.method == "DELETE":
+            profile.delete()
+            return JsonResponse({'status': 'Profile deleted.'})
         return JsonResponse({'status': 'Invalid request'}, status=400)
     else:
         return HttpResponseBadRequest('Invalid request')

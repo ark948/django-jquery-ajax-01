@@ -12,7 +12,9 @@ function getALlProfiles(url) {
             profileList.innerHTML = "";
 
             (data.context).forEach(profile => {
-                const profileHTMLElement = `<li id=Item${profile.id}> ID: ${profile.id} - Name: ${profile.name} - Email: ${profile.email} </li>`;
+                // custom data was set to improve update
+                const profileHTMLElement = `<li id=${profile.id} data-profile-id=${profile.id} data-profile-name=${profile.name} data-profile-email:${profile.email}>${profile.id} | ${profile.name} | ${profile.email}</li>`;
+                //const profileHTMLElement = $('#')
                 profileList.innerHTML += profileHTMLElement;
             });
         });
@@ -67,6 +69,21 @@ function updateProfile(url, payload) {
             "X-CSRFToken": getCookie("csrftoken"),
         },
         body: JSON.stringify({ payload: payload })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+}
+
+function deleteThis(url) {
+    fetch(url, {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": getCookie("csrftoken"),
+        }
     })
         .then(response => response.json())
         .then(data => {
