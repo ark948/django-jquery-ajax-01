@@ -8,5 +8,6 @@ urlpatterns = [
     path('with-fetch', views.with_fetch, name='with-fetch'),
     path('get-profile/<int:pk>/', views.get_profile, name='getProfileItem'),
     path('profile/<int:profileId>/', views.profile, name='profile-edit'),
+    path('profile-put/<int:id>', views.profile_put),
     path('', views.index, name='index'),
 ]

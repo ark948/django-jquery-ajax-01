@@ -9,9 +9,11 @@
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static '/bootstrap/js/bootstrap.bundle.min.js.map' %}"></script>
     <script src="{% static '/js/jquery-3.7.1.js' %}"></script>
+    <script src="{% static '/js/main.js' %}"></script>
 </head>
 
 <body>
+    <!-- GET -->
     <h1>List of live data</h1>
     <ul id="display-data"></ul>
     <table id="data-table">
@@ -19,6 +21,7 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Id:</th>
             </tr>
         </thead>
         <tbody id="data-tbody">
@@ -26,12 +29,22 @@
     </table>
     <button type="button" id="refresh">Refresh</button><h6>(Manual Refresh)</h6>
 
+    <!-- POST -->
     <h1>Submit form</h1>
     <form id="post-form" method="POST" action="{% url 'create' %}">
         {% csrf_token %}
         <p>Name</p><input type="text" name="name" id="name"><br>
         <p>Email</p><input type="email" name="email" id="email"><br>
         <p>Bio</p><input type="text" name="bio" id="bio"><br>
+        <input type="submit">
+    </form>
+
+    <h2>PUT</h2>
+    <form id="putForm">
+        {% csrf_token %}
+        <p>Id:</p><input type="number" id="putId">
+        <p>Name:</p><input type="text" id="putName">
+        <p>Email</p><input type="email" id="putEmail">
         <input type="submit">
     </form>
     <p id="notifs"></p>
@@ -46,7 +59,7 @@
                     let tbodyRef = $("#data-table").find('tbody');
                     for (let key in data.profiles)
                         {
-                            let temp = "<tr><td>"+data.profiles[key].name +"</td>" + "<td>" + data.profiles[key].email + "</td></tr>"
+                            let temp = "<tr><td>" + data.profiles[key].id + "</td><td>"+data.profiles[key].name + "</td><td>" + data.profiles[key].email + "</td></tr>";
                             tbodyRef.append(temp);
                         }
                 },
@@ -66,7 +79,7 @@
                         let tbodyRef = $("#data-table").find('tbody');
                         for (let key in data.profiles)
                         {
-                            let temp = "<tr><td>"+data.profiles[key].name +"</td>" + "<td>" + data.profiles[key].email + "</td></tr>"
+                            let temp = "<tr><td>" + data.profiles[key].id + "</td><td>"+data.profiles[key].name + "</td><td>" + data.profiles[key].email + "</td></tr>";
                             tbodyRef.append(temp);
                         }
                         document.getElementById("post-form").reset();
@@ -76,6 +89,35 @@
                         alert(message);
                     }
                 })
+            });
+
+            // PUT 
+            $('#putForm').submit(function (e) {
+                e.preventDefault();
+                let profileId = $('#putId').val();
+                const profile_id = $('#putId').val();
+                const formData = {
+                    name: $('#putName').val(),
+                    email: $('#putEmail').val(),
+                };
+                $.ajax({
+                    url: `profile-put/${profile_id}`,
+                    type: 'PUT',
+                    dataType: "json",
+                    data: JSON.stringify({payload: formData}),
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    success: (data) => {
+                        console.log("SUCCESS");
+                        console.log(data);
+                    },
+                    error: (error) => {
+                        console.log("FAILURE");
+                        console.log(error);
+                    }
+                });
             });
         });
         // form post

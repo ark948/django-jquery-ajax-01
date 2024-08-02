@@ -1,4 +1,4 @@
-console.log("MAIN HARD LOADED");
+console.log("Main.js Hard Loaded");
 // getting all records using fetch
 function getALlProfiles(url) {
     fetch(url, {

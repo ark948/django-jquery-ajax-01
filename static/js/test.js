@@ -1,1 +1,1 @@
-console.log("STATIC HARD LOADED");
+console.log("Static Hard Loaded");
