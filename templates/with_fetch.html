@@ -63,7 +63,7 @@
                 document.getElementById("profileNamePut").setAttribute("value", item_name);
                 document.getElementById("profileEmailPut").value = item_email;
             }
-        })
+        });
 
         // GET
         const get_all_profiles_url = "{% url 'getProfilesV2' %}"; // GET and POST have the same handler

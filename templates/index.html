@@ -33,18 +33,18 @@
     <h1>Submit form</h1>
     <form id="post-form" method="POST" action="{% url 'create' %}">
         {% csrf_token %}
-        <p>Name</p><input type="text" name="name" id="name"><br>
-        <p>Email</p><input type="email" name="email" id="email"><br>
-        <p>Bio</p><input type="text" name="bio" id="bio"><br>
+        Name:<input type="text" name="name" id="name">
+        Email:<input type="email" name="email" id="email">
+        Bio:<input type="text" name="bio" id="bio">
         <input type="submit">
     </form>
 
     <h2>PUT</h2>
     <form id="putForm">
         {% csrf_token %}
-        <p>Id:</p><input type="number" id="putId">
-        <p>Name:</p><input type="text" id="putName">
-        <p>Email</p><input type="email" id="putEmail">
+        Id:<input type="number" id="putId">
+        Name:<input type="text" id="putName">
+        Email:<input type="email" id="putEmail">
         <input type="submit">
     </form>
 
@@ -63,10 +63,21 @@
                 url: '{% url "getProfiles" %}',
                 success: (data) => {
                     let tbodyRef = $("#data-table").find('tbody');
+                    let counter = 0;
                     for (let key in data.profiles)
                         {
+                            let row = document.createElement('tr');
+                            row.setAttribute('id', data.profiles[key].id);
+
+                            let row_cell = document.createElement('td');
+                            row_cell.innerText = `${data.profiles[key].id} ${data.profiles[key].name} ${data.profiles[key].name}`;
+                            
                             let temp = "<tr><td>" + data.profiles[key].id + "</td><td>"+data.profiles[key].name + "</td><td>" + data.profiles[key].email + "</td></tr>";
-                            tbodyRef.append(temp);
+                            let temp2 = `<tr id=${++counter} onclick='get_id'><td>${data.profiles[key].id}</td><td>${data.profiles[key].name}</td><td>${data.profiles[key].email}</td></tr>`;
+
+                            row.appendChild(row_cell);
+                            tbodyRef.append(row);
+                            row.addEventListener('click', (event) => { get_id(event) });
                         }
                 },
                 error: (e) => {
@@ -74,7 +85,9 @@
                 }
             });
 
-            $('')
+            // adding items to delete field upon clicking
+            // deleted
+
             // refresh button
             $("#refresh").click(function() {
                 // clearing table
@@ -85,10 +98,19 @@
                     success: (data) => {
                         console.log("Refreshing list...");
                         let tbodyRef = $("#data-table").find('tbody');
+                        let counter = 0;
                         for (let key in data.profiles)
                         {
+                            let row = document.createElement('tr');
+                            row.setAttribute('id', data.profiles[key].id);
+                            let row_cell = document.createElement('td');
+                            row_cell.innerText = `${data.profiles[key].id} ${data.profiles[key].name} ${data.profiles[key].name}`;
                             let temp = "<tr><td>" + data.profiles[key].id + "</td><td>"+data.profiles[key].name + "</td><td>" + data.profiles[key].email + "</td></tr>";
-                            tbodyRef.append(temp);
+                            let temp2 = `<tr id=${++counter} onclick='get_id'><td>${data.profiles[key].id}</td><td>${data.profiles[key].name}</td><td>${data.profiles[key].email}</td></tr>`;
+
+                            row.appendChild(row_cell);
+                            tbodyRef.append(row);
+                            row.addEventListener('click', (event) => { get_id(event) });
                         }
                         document.getElementById("post-form").reset();
                         $("#notifs").text('');
@@ -96,7 +118,7 @@
                     error: (message) => {
                         alert(message);
                     }
-                })
+                });
             });
 
             // PUT 
@@ -174,6 +196,16 @@
                 }
             });
         });
+        function get_id(event) {
+            console.log('Get_id called.');
+            try {
+                console.log(event.currentTarget.id);
+                document.getElementById('delId').value = event.currentTarget.id;
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
     </script>
 </body>
 
