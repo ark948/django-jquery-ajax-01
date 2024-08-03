@@ -68,9 +68,10 @@
                         {
                             let row = document.createElement('tr');
                             row.setAttribute('id', data.profiles[key].id);
+                            row.setAttribute('data-name', data.profiles[key].name);
 
                             let row_cell = document.createElement('td');
-                            row_cell.innerText = `${data.profiles[key].id} ${data.profiles[key].name} ${data.profiles[key].name}`;
+                            row_cell.innerText = `${data.profiles[key].id} ${data.profiles[key].name} ${data.profiles[key].email}`;
                             
                             let temp = "<tr><td>" + data.profiles[key].id + "</td><td>"+data.profiles[key].name + "</td><td>" + data.profiles[key].email + "</td></tr>";
                             let temp2 = `<tr id=${++counter} onclick='get_id'><td>${data.profiles[key].id}</td><td>${data.profiles[key].name}</td><td>${data.profiles[key].email}</td></tr>`;
@@ -103,8 +104,10 @@
                         {
                             let row = document.createElement('tr');
                             row.setAttribute('id', data.profiles[key].id);
+                            row.setAttribute('data-name', data.profiles[key].name);
+
                             let row_cell = document.createElement('td');
-                            row_cell.innerText = `${data.profiles[key].id} ${data.profiles[key].name} ${data.profiles[key].name}`;
+                            row_cell.innerText = `${data.profiles[key].id} ${data.profiles[key].name} ${data.profiles[key].email}`;
                             let temp = "<tr><td>" + data.profiles[key].id + "</td><td>"+data.profiles[key].name + "</td><td>" + data.profiles[key].email + "</td></tr>";
                             let temp2 = `<tr id=${++counter} onclick='get_id'><td>${data.profiles[key].id}</td><td>${data.profiles[key].name}</td><td>${data.profiles[key].email}</td></tr>`;
 
@@ -143,6 +146,7 @@
                         console.log("SUCCESS");
                         console.log(data);
                         $("#refresh").trigger("click");
+                        document.getElementById("putForm").reset();
                     },
                     error: (error) => {
                         console.log("FAILURE");
@@ -201,6 +205,7 @@
             try {
                 console.log(event.currentTarget.id);
                 document.getElementById('delId').value = event.currentTarget.id;
+                document.getElementById('putId').value = event.currentTarget.id;
             } catch (e) {
                 console.log(e);
             }
