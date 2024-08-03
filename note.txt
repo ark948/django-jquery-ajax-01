@@ -16,3 +16,5 @@ trying to move js code into their own files
 Current problems:
 urls and endpoint names are messy.
 static files imports are very messy.
+
+routes got very messy, had to write new ones for jquery put and delete

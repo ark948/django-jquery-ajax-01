@@ -12,7 +12,7 @@
     <script src="{% static '/js/main.js' %}"></script>
 </head>
 
-<body>
+<body style="padding: 30px; margin: 30px;">
     <!-- GET -->
     <h1>List of live data</h1>
     <ul id="display-data"></ul>
@@ -47,6 +47,12 @@
         <p>Email</p><input type="email" id="putEmail">
         <input type="submit">
     </form>
+
+    <h2>DELETE</h2>
+    <form id="delForm">
+        <p>Id:</p><input type="number" id="delId">
+        <input type="submit">
+    </form>
     <p id="notifs"></p>
     <a href="{% url 'with-fetch' %}">using fetch</a>
     <script>
@@ -67,6 +73,8 @@
                     alert(e);
                 }
             });
+
+            $('')
             // refresh button
             $("#refresh").click(function() {
                 // clearing table
@@ -112,10 +120,34 @@
                     success: (data) => {
                         console.log("SUCCESS");
                         console.log(data);
+                        $("#refresh").trigger("click");
                     },
                     error: (error) => {
                         console.log("FAILURE");
                         console.log(error);
+                    }
+                });
+            });
+            
+            // Delete
+            $('#delForm').submit(function (e) {
+                e.preventDefault();
+                const profile_id = $('#delId').val();
+                $.ajax({
+                    url: `profile-del/${profile_id}`,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    success: (data) => {
+                        console.log("Profile Deleted Successfully.");
+                        $('#delForm').trigger('reset');
+                        $("#refresh").trigger("click");
+                    },
+                    error: (error) => {
+                        console.log("Error");
                     }
                 });
             });

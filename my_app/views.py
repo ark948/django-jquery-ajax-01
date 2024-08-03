@@ -88,3 +88,15 @@ def profile_put(request, id):
         return JsonResponse({'status': 'Invalid requset'}, status=400)
     else:
         return HttpResponseBadRequest('Invalid request')
+    
+
+def profile_del(request, id):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if is_ajax:
+        profile = get_object_or_404(Profile, id=id)
+        if request.method == 'DELETE':
+            profile.delete()
+            return JsonResponse({'status': 'Profile deleted.'})
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    else:
+        return HttpResponseBadRequest('Invalid request')

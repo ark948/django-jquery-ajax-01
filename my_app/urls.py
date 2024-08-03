@@ -9,5 +9,6 @@ urlpatterns = [
     path('get-profile/<int:pk>/', views.get_profile, name='getProfileItem'),
     path('profile/<int:profileId>/', views.profile, name='profile-edit'),
     path('profile-put/<int:id>', views.profile_put),
+    path('profile-del/<int:id>', views.profile_del),
     path('', views.index, name='index'),
 ]
